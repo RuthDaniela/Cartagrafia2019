@@ -1,0 +1,524 @@
+ /**
+ * Multi-Monitor Sketch (v2.21)
+ * by GoToLoop (2015/Jun/28)
+ *
+ * forum.Processing.org/two/discussion/12319/
+ * using-papplet-runsketch-to-create-multiple-windows-in-a-sketch
+ *
+ * forum.Processing.org/two/discussion/11304/
+ * multiple-monitors-primary-dragable-secondary-fullscreen
+ *
+ * forum.Processing.org/two/discussion/10937/multiple-sketches
+ */
+
+StringList[][][] data = new StringList[3][9][3];
+String parrafo;
+PFont fuente;
+
+//LEAP MOTION
+import de.voidplus.leapmotion.*;
+LeapMotion leap1;
+LeapMotion leap2;
+
+//PARA TENER DOS PANTALLAS
+ProjectorSketch projector;
+
+//Para hacer el clear
+//PGraphics pg;
+
+
+float movLeft = 0;
+float movRight = 0;
+float movLeft2 = 0;
+float movRight2 = 0;
+
+float handGrab1;
+float handGrab2;
+
+//vectores
+//float punXini = width/2;
+//float punYini = height/2;
+//float punXfin;
+//float punYfin;
+
+//float[] punX = new float[1000000];
+//float[] punY = new float[1000000];
+
+//float[] colR= new float[1000000];
+//float[] colG= new float[1000000];
+//float[] colB= new float[1000000];
+
+//int numPuntos = 0;
+
+float z;
+float start;
+float delta;
+
+//https://processing.org/reference/settings_.html
+void settings() {
+  size(1492, 1033, JAVA2D);
+
+  //fullScreen();
+}
+
+void setup() {
+  background(225);
+
+  leap1 = new LeapMotion(this);
+
+  runSketch( new String[] {
+    "--display=1",
+    "--location=" + (displayWidth>>2) + ',' + (displayHeight>>3),
+    "--sketch-path=" + sketchPath(""),
+    "" }
+    , projector = new ProjectorSketch() );
+
+  start = millis();
+}
+
+void draw() {
+
+  float time = millis() - start;
+  int deseconds = (int) time * 10 / 200;
+
+  if (delta != deseconds)
+  {
+    delta = deseconds;
+    stroke(225);
+    strokeWeight(random(1, 2));
+
+    for (Hand hand1 : leap1.getHands ()) {
+      PVector handPosition1 = hand1.getPosition();
+      boolean handIsLeft1  = hand1.isLeft();
+      boolean handIsRight1 = hand1.isRight();
+      handGrab1  = hand1.getGrabStrength();
+
+      float[] movimientoa = handPosition1.array();
+
+      if (handIsLeft1 || handIsRight1) {
+        float movx= movimientoa[0];
+        float movy= movimientoa[1];
+        float movz= movimientoa[2];
+
+
+        //line(movy, movx, movy-movz, movx+movz);
+        line(movx+ 50, movy, movy*(random(5, 10)), movx*(random(0, 5)));
+      }
+
+      for (Finger finger1 : hand1.getFingers()) {
+        finger1.drawJoints(2);
+      }
+    }
+  }
+}
+
+static final void removeExitEvent(final PSurface surf) {
+  final java.awt.Window win
+    = ((processing.awt.PSurfaceAWT.SmoothCanvas) surf.getNative()).getFrame();
+
+  for (final java.awt.event.WindowListener evt : win.getWindowListeners())
+    win.removeWindowListener(evt);
+}
+
+class ProjectorSketch extends PApplet {
+  void settings() {
+    size(1050, 550, JAVA2D); //modificado
+    //fullScreen();
+  }
+
+  void setup() {
+    //Inicio FRases
+    for (int i = 0; i <= 2; i++) {
+      for (int j = 0; j <= 8; j++) {
+        for (int k = 0; k <= 2; k++) {
+          data[i][j][k] = new StringList();
+          //data[i][j][k].append(" ");
+        }
+      }
+    }
+
+    //data[2][8][5].append("mk en serio me da mucha tritesa que todo haya cambiado tanto por que pues nada mk yo soi conciente de que en parte la culpa fue mia mk");
+    //data[2][8][2].append("Yo no quiero que esto se siga dañando mk por que pues yo se que las cosas no van a volver a ser como antes.");
+    //data[2][8][5].append("cada momento que pasa en esta biblioteca sola solo pienso en porque todo esto me esta pasando en porque se destruyen las pocas buenas cosas");
+    data[2][8][2].append("Aunque se me parta todo cada ves que lo digo tengo que decirle adios a todo lo que quiero.");
+    //data[2][8][2].append("Aunque se me parta todo cada ves que lo digo tengo que decirle adios a todo lo que quiero.");
+    //data[2][8][2].append("Aunque se me parta todo cada ves que lo digo tengo que decirle adios a todo lo que quiero.");
+    data[2][8][2].append("No te imaginas el sufrimiento que me causa tengo miedo PANICO de que se repita lo que paso.");
+    //data[2][8][2].append("No te imaginas el sufrimiento que me causa tengo miedo PANICO de que se repita lo que paso.");
+    //data[2][8][2].append("No te imaginas el sufrimiento que me causa tengo miedo PANICO de que se repita lo que paso.");
+    data[2][8][2].append("un consejo no confies totalmente en alguien no le cuentes tus cosas por que confiar fue lo que nos mato.");
+    //data[2][8][2].append("un consejo no confies totalmente en alguien no le cuentes tus cosas por que confiar fue lo que nos mato.");
+    //data[2][8][2].append("un consejo no confies totalmente en alguien no le cuentes tus cosas por que confiar fue lo que nos mato.");
+    data[2][8][2].append("Sabes? te tengo envidía, por este mismo autococimiento tuyo, todas te admiran por eso mismo... no se me dan celos.");
+    data[2][8][2].append("Sabes? te tengo envidía, por este mismo autococimiento tuyo, todas te admiran por eso mismo... no se me dan celos.");
+    data[2][8][2].append("Sabes? te tengo envidía, por este mismo autococimiento tuyo, todas te admiran por eso mismo... no se me dan celos.");
+    //data[2][8][2].append("Sabes? te tengo envidía, por este mismo autococimiento tuyo, todas te admiran por eso mismo... no se me dan celos.");
+    //data[2][8][2].append("Sabes? te tengo envidía, por este mismo autococimiento tuyo, todas te admiran por eso mismo... no se me dan celos.");
+    data[2][8][2].append("Me molesta estar tan encerrada en mi que no te pueda ver.");
+    data[2][8][2].append("Me molesta estar tan encerrada en mi que no te pueda ver.");
+    data[2][8][2].append("Me molesta estar tan encerrada en mi que no te pueda ver.");
+    //data[2][8][2].append("Me molesta estar tan encerrada en mi que no te pueda ver.");
+    //data[2][8][2].append("Me molesta estar tan encerrada en mi que no te pueda ver.");
+
+    //data[2][8][4].append("Aun no me entra en la cabeza todo lo que esta sucediendo y por eso te ruego te imploro que nunca me vallas a olvidar por que yo te amo y lo sabes");
+    //data[2][8][2].append("Lamento si te estreso mucho o si en algún momento has sentido que te he mirado como una estúpida o algo asi");
+    //data[2][8][4].append("la confianza se ha ido perdiendo y pues mk no hay mucho que hacer respecto a eso pero de lo que si hay mucho que hacer es para que no nos separemos mas");
+    //data[2][8][2].append("Siento mucho si te has sentido excluida del grupo, alejada de nosotras.. no te lo voy a negar probablemente ya ha pasado mucho");
+
+    //  data[2][8][4].append("mk antes eras como mi gran apoyo mk y pues como la persona en la que mas confiaba y asi a la que yo sabia que podia hablar y contar mi problemas");
+    //  data[2][8][4].append("a pesar de los miles de problemas que he tenido encima ustedes han valido tanto y significan tanto que han merecido todo mi empeño y mi dolor y todo");
+    //data[2][8][2].append("sinceramente te digo que considero que incluso ya estas cambiando y no me gusta en lo mas minino me parece un asco");
+
+    //data[2][8][1].append("no quisiera perder nuestra amistad lo que vivimos fue una amistad muy linda y no quiero que quede en pasados");
+
+    //data[2][8][1].append("realmente ocupas un lugar gigante en mi corazon y pues mk por eso me duele");
+    //data[2][8][1].append("Jamas voy a encontrar una personita tan especial como tu y por eso me duele saber que me tengo que alejar de la unica persona en la que confio a ciegas mk");
+    //data[2][8][1].append("Tu no eres ninguna tonta y no tienes por que hacerme caso no te creas tonta antes para mi eres mas que eso eres inteligente y muy amable.");
+
+    //data[2][8][1].append("Para que sepas esta no es una carta para expresarte lo mucho que te quiero sino para decirte que me preocupa que estes tanto con las ñoñas no quiero que te vuelvas como ellas");
+    //data[2][8][1].append("mi vida espero que no me olvides yo no lo hare hermosa te amo pasado recuerdalo");
+    //data[2][8][1].append("estoy mas que segura que tu vas a estar bien aunque aveces esas cosas den miedo, siempre estoy a tu lado para gritar junto a ti...");
+    //data[2][8][1].append("Solo me resta decirte Te amo won enserio y mucho y por favor nunk se olvide de mi!!! La extraño!!!");
+
+    data[2][8][1].append("realmente ocupas un lugar gigante en mi corazon y pues mk por eso me duele");
+    data[2][8][1].append("realmente ocupas un lugar gigante en mi corazon y pues mk por eso me duele");
+    data[2][8][1].append("realmente ocupas un lugar gigante en mi corazon y pues mk por eso me duele");
+
+    data[2][8][1].append("Se que estas pasando por un momento dificil y quiero que sepas que tienes todo mi apoyo.");
+    data[2][8][1].append("Se que estas pasando por un momento dificil y quiero que sepas que tienes todo mi apoyo.");
+    data[2][8][1].append("Se que estas pasando por un momento dificil y quiero que sepas que tienes todo mi apoyo.");
+
+    data[2][8][1].append("Me perdí a mi misma en algun punto tengo miedo de que este camino no sea el mio, tal vez esa no soy yo");
+    data[2][8][1].append("Me perdí a mi misma en algun punto tengo miedo de que este camino no sea el mio, tal vez esa no soy yo");
+    data[2][8][1].append("Me perdí a mi misma en algun punto tengo miedo de que este camino no sea el mio, tal vez esa no soy yo");
+
+
+    //data[2][8][0].append("Por medio de esta carta quiero expresarte demasiadas cosas enserio quiero decierte en primera que como ya sabes eres una persona muy importante para mi mk");
+    //data[2][8][0].append("Niña mia sabes de sobra que eres mi vida hemosa sabes que te amo que no te cambiaria por nada en el mundo en tu sabes que confio todo");    
+
+    data[2][8][0].append("te quiero dar las GRACIAS por siempre estar ahí para mi espero que sigas confiando en mi");
+    data[2][8][0].append("te quiero dar las GRACIAS por siempre estar ahí para mi espero que sigas confiando en mi");
+    data[2][8][0].append("te quiero dar las GRACIAS por siempre estar ahí para mi espero que sigas confiando en mi");
+
+    data[2][8][0].append("Quise regalarte, de alguna forma (por más mínima que fuera), algunas flores de sakura.");
+    data[2][8][0].append("Quise regalarte, de alguna forma (por más mínima que fuera), algunas flores de sakura.");
+    data[2][8][0].append("Quise regalarte, de alguna forma (por más mínima que fuera), algunas flores de sakura.");
+
+    data[2][8][0].append("Creo que todos estamos unidos en un mar, en un planeta azul, lo que hace que sea el color al que más acostumbrados estamos.");
+    data[2][8][0].append("Creo que todos estamos unidos en un mar, en un planeta azul, lo que hace que sea el color al que más acostumbrados estamos.");
+    data[2][8][0].append("Creo que todos estamos unidos en un mar, en un planeta azul, lo que hace que sea el color al que más acostumbrados estamos.");
+
+    data[2][8][0].append("He de decirte que desde octavo, me has caído muy bien. Sacas de mi una parte que casi nunca aparece.");
+    //data[2][8][0].append("De alguna forma me gustaría ser como tu, tan despejada mentalmente y con objetivos tan claros.");
+    //data[2][8][0].append("Con ver la variedad que hay en tu familia se que hay un poco de todo eso en tu, y me da más curiosidad por conocerte más a fondo.");
+    //data[2][8][0].append("Espero que pronto vayamos a comprar ropa, que vayamos al museo nacional a ver la exivición del rock y al concierto de piano.");
+    //data[2][8][0].append("Hago esta carta para decirte que te amo demasiado.");
+    //data[2][8][0].append("Eres mi mejor amiga y savez que siempre vas a estar en mi corazon, (pequeño como un limon XD)");
+
+    data[2][7][2].append("yo no confio nien mi sombra (ultimamente actua de forma muy sospechosa) XD");
+    data[2][7][2].append("yo no confio nien mi sombra (ultimamente actua de forma muy sospechosa) XD");
+    data[2][7][2].append("yo no confio nien mi sombra (ultimamente actua de forma muy sospechosa) XD");
+    data[2][7][2].append("yo no confio nien mi sombra (ultimamente actua de forma muy sospechosa) XD");
+
+    data[2][7][2].append("las decepciones no faltan en la vida, siempre podemos tomar la opcion de darles la espalda y omitirlas");
+    data[2][7][2].append("muchas personas afortunadamente salieron de nuestras vidas como Valentina y Marcela, y las lesbis...");
+    data[2][7][2].append("hoy descubri que odiar a los profesores es algo que te llena mucho, te hace feliz XD XD XD");
+
+    data[2][7][1].append("son mas las sonrisas que las lagrimas y eso cuenta");
+    data[2][7][1].append("oye aunque some people never get beyond their stupid pride... siempre esta la opcion de ignorarlas... y hacerles pistola...");
+    data[2][7][1].append("fuimos lokas, fui una MANIPULADORA, fuimos jardineras, y alguna vez nos alejamos, peleamos y caimos cada una en la firme frase de Yo Tengo La Razon");
+
+    data[2][7][1].append("aunque yo ya me quiero ir de mi casa y de este colegio, te voy a extrañar mucho");
+    data[2][7][1].append("aunque yo ya me quiero ir de mi casa y de este colegio, te voy a extrañar mucho");
+    data[2][7][1].append("aunque yo ya me quiero ir de mi casa y de este colegio, te voy a extrañar mucho");
+
+    data[2][7][0].append("¿porque las lombrices son tan felices...? tal vez fuman marihuana...");
+    data[2][7][0].append("¿porque las lombrices son tan felices...? tal vez fuman marihuana...");
+    data[2][7][0].append("¿porque las lombrices son tan felices...? tal vez fuman marihuana...");
+
+
+    data[2][7][0].append("hemos llegado a realizar nuestras metas sin siquiera darnos cuenta, y siempre hemos ideo cambiando... pero para bien");
+    data[2][7][0].append("hemos llegado a realizar nuestras metas sin siquiera darnos cuenta, y siempre hemos ideo cambiando... pero para bien");
+    data[2][7][0].append("hemos llegado a realizar nuestras metas sin siquiera darnos cuenta, y siempre hemos ideo cambiando... pero para bien");
+
+    data[2][7][0].append("agradesco a la vida poner en mi camino a una persona tan especial como tu");
+    data[2][7][0].append("agradesco a la vida poner en mi camino a una persona tan especial como tu");    
+    data[2][7][0].append("agradesco a la vida poner en mi camino a una persona tan especial como tu");
+
+    data[2][6][0].append("te deseo lo mejor en este nuevo periodo y que Dios te ilumine y te favoresca");
+    data[2][6][0].append("te deseo lo mejor en este nuevo periodo y que Dios te ilumine y te favoresca");    
+    data[2][6][0].append("te deseo lo mejor en este nuevo periodo y que Dios te ilumine y te favoresca");
+
+    //data[2][6][0].append("[2][6][1]");
+    //data[2][6][0].append("[2][6][1]");
+    //data[2][6][0].append("[2][6][1]");
+
+    data[2][6][1].append("ya que somos las mejores amigas no quiero que nos separemos");
+    data[2][6][1].append("ya que somos las mejores amigas no quiero que nos separemos");
+    data[2][6][1].append("ya que somos las mejores amigas no quiero que nos separemos");
+    data[2][6][1].append("ya que somos las mejores amigas no quiero que nos separemos");
+
+    //data[2][6][1].append("[2][6][3]");
+
+    data[2][6][2].append("en lo que hablamos el Jueves no me gusto lo que opinaste sobre carolina ya que ella me cae muy mal");
+    data[2][6][2].append("en lo que hablamos el Jueves no me gusto lo que opinaste sobre carolina ya que ella me cae muy mal");    
+    data[2][6][2].append("en lo que hablamos el Jueves no me gusto lo que opinaste sobre carolina ya que ella me cae muy mal");
+
+    data[2][6][2].append("Carolina ya me amenazo de competir por ti; solo quiero que ella sea una buena amiga y no ocupe mi lugar");
+    data[2][6][2].append("Carolina ya me amenazo de competir por ti; solo quiero que ella sea una buena amiga y no ocupe mi lugar");
+    data[2][6][2].append("Carolina ya me amenazo de competir por ti; solo quiero que ella sea una buena amiga y no ocupe mi lugar");
+
+
+    data[1][5][2].append("Se que piensas que el grupo ha cambiado pero vamos a hacer lo posible para pasarla bien");
+    data[1][5][2].append("Se que piensas que el grupo ha cambiado pero vamos a hacer lo posible para pasarla bien");
+    data[1][5][2].append("Se que piensas que el grupo ha cambiado pero vamos a hacer lo posible para pasarla bien");
+
+    data[1][5][2].append("Ojala te vaya bien pintando cuadros en el simón bolívar y que seas una gran artista cuando salgas del colé");
+    data[1][5][2].append("Ojala te vaya bien pintando cuadros en el simón bolívar y que seas una gran artista cuando salgas del colé");
+    data[1][5][2].append("Ojala te vaya bien pintando cuadros en el simón bolívar y que seas una gran artista cuando salgas del colé");
+
+    data[1][5][1].append("mk emborracharmos el ultimo dia como lokas i pasala del putas");
+    data[1][5][1].append("gracia por las canciones que me enseñaste y por muchas cosas mas.");
+    data[1][5][1].append("sabes escribiendo esto me acorde de la marihuana  y me dio risa porque la primera ves que la cante mis papas casi se mueren jajajja fue divertido.");
+
+    data[1][5][1].append("i aunq digas q no te kiero...tienes razón TE AMO!!");
+    data[1][5][1].append("i aunq digas q no te kiero...tienes razón TE AMO!!");
+    data[1][5][1].append("i aunq digas q no te kiero...tienes razón TE AMO!!");
+    data[1][5][1].append("i aunq digas q no te kiero...tienes razón TE AMO!!");
+
+    data[1][5][0].append("gracias por hacerme reir tanto por escucharme siempre por escuchar mis historias con Julian y odialo tanto");
+    data[1][5][0].append("gracias por hacerme reir tanto por escucharme siempre por escuchar mis historias con Julian y odialo tanto");
+    data[1][5][0].append("gracias por hacerme reir tanto por escucharme siempre por escuchar mis historias con Julian y odialo tanto");
+    data[1][5][0].append("gracias por hacerme reir tanto por escucharme siempre por escuchar mis historias con Julian y odialo tanto");
+
+    //data[1][5][0].append("[1][5][1] ");
+
+    //data[1][5][0].append("[1][5][0]");
+
+
+    data[1][4][2].append("lamento comunicarte que no volver al colegio por lo menos por el proximo año");
+    data[1][4][2].append("lamento comunicarte que no volver al colegio por lo menos por el proximo año");
+    data[1][4][2].append("lamento comunicarte que no volver al colegio por lo menos por el proximo año");
+    data[1][4][2].append("lamento comunicarte que no volver al colegio por lo menos por el proximo año");
+
+    data[1][4][2].append("bby enserio te la encargo resto para ke no se sienta solita ni nd");
+    data[1][4][2].append("bby enserio te la encargo resto para ke no se sienta solita ni nd");
+    data[1][4][2].append("bby enserio te la encargo resto para ke no se sienta solita ni nd");
+    data[1][4][2].append("bby enserio te la encargo resto para ke no se sienta solita ni nd");
+
+    data[1][4][1].append("ps ke lastima ke no este yo para animarlas por ke obvio soy el alma de la fiesta jajaja :D");
+    data[1][4][1].append("ps ke lastima ke no este yo para animarlas por ke obvio soy el alma de la fiesta jajaja :D");
+    data[1][4][1].append("ps ke lastima ke no este yo para animarlas por ke obvio soy el alma de la fiesta jajaja :D");
+    data[1][4][1].append("ps ke lastima ke no este yo para animarlas por ke obvio soy el alma de la fiesta jajaja :D");
+
+    data[1][4][1].append("Recibi tu carta de la semana pasada, quiero decirte que eres mi mejor amiga desde 1º a pesar de que ayamos cometido tantos errores de pelear algunos dias.");
+    data[1][4][1].append("Recibi tu carta de la semana pasada, quiero decirte que eres mi mejor amiga desde 1º a pesar de que ayamos cometido tantos errores de pelear algunos dias.");
+    data[1][4][1].append("Recibi tu carta de la semana pasada, quiero decirte que eres mi mejor amiga desde 1º a pesar de que ayamos cometido tantos errores de pelear algunos dias.");
+    data[1][4][1].append("Recibi tu carta de la semana pasada, quiero decirte que eres mi mejor amiga desde 1º a pesar de que ayamos cometido tantos errores de pelear algunos dias.");
+
+
+    data[1][4][0].append("siempre has tenido razón... tienes tanta voz profeta ke lo ke dices casi siempre c cumple");
+    data[1][4][0].append("siempre has tenido razón... tienes tanta voz profeta ke lo ke dices casi siempre c cumple");
+    data[1][4][0].append("siempre has tenido razón... tienes tanta voz profeta ke lo ke dices casi siempre c cumple");
+    data[1][4][0].append("siempre has tenido razón... tienes tanta voz profeta ke lo ke dices casi siempre c cumple");
+
+    data[1][4][0].append("desde el año pasado para este he aprndido a cogerte muchísimo cariño");
+    data[1][4][0].append("desde el año pasado para este he aprndido a cogerte muchísimo cariño");
+    data[1][4][0].append("desde el año pasado para este he aprndido a cogerte muchísimo cariño");
+    data[1][4][0].append("desde el año pasado para este he aprndido a cogerte muchísimo cariño");
+
+    data[1][4][0].append("Quiero agradeserte tu forma de ser tan especial y colaboradora conmigo gracias Ruth,");
+    data[1][4][0].append("Quiero agradeserte tu forma de ser tan especial y colaboradora conmigo gracias Ruth,");
+    data[1][4][0].append("Quiero agradeserte tu forma de ser tan especial y colaboradora conmigo gracias Ruth,");
+    data[1][4][0].append("Quiero agradeserte tu forma de ser tan especial y colaboradora conmigo gracias Ruth,");
+
+
+    data[1][3][2].append("aunq' la verdad se q' en este año nos hemos alejado mucho quiero que sepas q' te kelooo");
+    data[1][3][2].append("aunq' la verdad se q' en este año nos hemos alejado mucho quiero que sepas q' te kelooo");
+    data[1][3][2].append("aunq' la verdad se q' en este año nos hemos alejado mucho quiero que sepas q' te kelooo");
+    data[1][3][2].append("aunq' la verdad se q' en este año nos hemos alejado mucho quiero que sepas q' te kelooo");
+    data[1][3][2].append("aunq' la verdad se q' en este año nos hemos alejado mucho quiero que sepas q' te kelooo");
+
+    data[1][3][2].append("person x la letra pero esque estoy muy aporada");
+    data[1][3][2].append("person x la letra pero esque estoy muy aporada");
+    data[1][3][2].append("person x la letra pero esque estoy muy aporada");
+    data[1][3][2].append("person x la letra pero esque estoy muy aporada");
+
+    data[1][3][1].append("eres de las pocas personas  en las q' confio porq' siempre he tenido tu apoyo.");
+    data[1][3][1].append("eres de las pocas personas  en las q' confio porq' siempre he tenido tu apoyo.");
+    data[1][3][1].append("eres de las pocas personas  en las q' confio porq' siempre he tenido tu apoyo.");
+    data[1][3][1].append("eres de las pocas personas  en las q' confio porq' siempre he tenido tu apoyo.");
+
+    //data[1][3][1].append("[1][3][2]");
+
+
+    data[1][3][0].append("Tienes muchos valores y ojala que nunca los cambies.");
+    data[1][3][0].append("Tienes muchos valores y ojala que nunca los cambies.");
+    data[1][3][0].append("Tienes muchos valores y ojala que nunca los cambies.");
+    data[1][3][0].append("Tienes muchos valores y ojala que nunca los cambies.");
+
+    //data[1][3][0].append(" [1][3][0]");
+
+    //data[0][2][2].append(" [0][2][5]");
+
+    //data[0][2][2].append("  [0][2][4] ");
+
+    data[0][2][1].append("la verdad a pesar de todas nuestras diferencias, han quedado en el pasado. ");
+    data[0][2][1].append("la verdad a pesar de todas nuestras diferencias, han quedado en el pasado. ");
+    data[0][2][1].append("la verdad a pesar de todas nuestras diferencias, han quedado en el pasado. ");
+    data[0][2][1].append("la verdad a pesar de todas nuestras diferencias, han quedado en el pasado. ");
+    data[0][2][1].append("la verdad a pesar de todas nuestras diferencias, han quedado en el pasado. ");
+
+    data[0][2][1].append("apesar de no conocerte muy bien, el poco tiempo que llevamos de amistad te has convertido en una personita super especial para mi.");
+    data[0][2][1].append("apesar de no conocerte muy bien, el poco tiempo que llevamos de amistad te has convertido en una personita super especial para mi.");
+    data[0][2][1].append("apesar de no conocerte muy bien, el poco tiempo que llevamos de amistad te has convertido en una personita super especial para mi.");
+    data[0][2][1].append("apesar de no conocerte muy bien, el poco tiempo que llevamos de amistad te has convertido en una personita super especial para mi.");
+    data[0][2][1].append("apesar de no conocerte muy bien, el poco tiempo que llevamos de amistad te has convertido en una personita super especial para mi.");
+
+    data[0][2][0].append("te deseo de todo <3 que mi Dios te bendiga y muchos éxitos para que puedas llegar muy lejos en lo que te propongas.");
+    data[0][2][0].append("te deseo de todo <3 que mi Dios te bendiga y muchos éxitos para que puedas llegar muy lejos en lo que te propongas.");
+
+    data[0][2][0].append("y pues que vacano tener esta oportunidad de conocer a personas como tú.");
+    data[0][2][0].append("y pues que vacano tener esta oportunidad de conocer a personas como tú.");
+    data[0][2][0].append("y pues que vacano tener esta oportunidad de conocer a personas como tú.");
+    data[0][2][0].append("y pues que vacano tener esta oportunidad de conocer a personas como tú.");
+    data[0][2][0].append("y pues que vacano tener esta oportunidad de conocer a personas como tú.");
+    data[0][2][0].append("y pues que vacano tener esta oportunidad de conocer a personas como tú.");
+
+    data[0][1][2].append("puede que nos hayamos alejado un poco pero igual me sigues pareciendo muy vakna.");
+    data[0][1][2].append("puede que nos hayamos alejado un poco pero igual me sigues pareciendo muy vakna.");
+    data[0][1][2].append("puede que nos hayamos alejado un poco pero igual me sigues pareciendo muy vakna.");
+    data[0][1][2].append("puede que nos hayamos alejado un poco pero igual me sigues pareciendo muy vakna.");
+
+    data[0][1][1].append("bueno la verdad no soy tan buena escribiendo cartas");
+    data[0][1][1].append("bueno la verdad no soy tan buena escribiendo cartas");
+    data[0][1][1].append("bueno la verdad no soy tan buena escribiendo cartas");
+    data[0][1][1].append("bueno la verdad no soy tan buena escribiendo cartas");
+
+    data[0][1][1].append("Aunque me gustarìa que hablaramos más.");
+    data[0][1][1].append("Aunque me gustarìa que hablaramos más.");
+    data[0][1][1].append("Aunque me gustarìa que hablaramos más.");
+    data[0][1][1].append("Aunque me gustarìa que hablaramos más.");
+
+    data[0][1][0].append("Kiero ke sepas ke me caes super bien y ps en este encuentro ps espero poder conocerte un poco más.");
+    data[0][1][0].append("Kiero ke sepas ke me caes super bien y ps en este encuentro ps espero poder conocerte un poco más.");
+    data[0][1][0].append("Kiero ke sepas ke me caes super bien y ps en este encuentro ps espero poder conocerte un poco más.");
+    data[0][1][0].append("Kiero ke sepas ke me caes super bien y ps en este encuentro ps espero poder conocerte un poco más.");
+
+    data[0][0][1].append("que la gozes este encuentro y las voy a extrañar a todas.");
+    data[0][0][1].append("que la gozes este encuentro y las voy a extrañar a todas.");
+    data[0][0][1].append("que la gozes este encuentro y las voy a extrañar a todas.");
+    data[0][0][1].append("que la gozes este encuentro y las voy a extrañar a todas.");
+    data[0][0][1].append("que la gozes este encuentro y las voy a extrañar a todas.");
+
+    data[0][0][1].append("Me alegra compartir contigo.");
+    data[0][0][1].append("Me alegra compartir contigo.");
+    data[0][0][1].append("Me alegra compartir contigo.");
+    data[0][0][1].append("Me alegra compartir contigo.");
+    data[0][0][1].append("Me alegra compartir contigo.");
+
+    data[0][0][0].append("aunque nos conocemos de este año me caiste super bien.");
+    data[0][0][0].append("aunque nos conocemos de este año me caiste super bien.");
+    data[0][0][0].append("aunque nos conocemos de este año me caiste super bien.");
+    data[0][0][0].append("aunque nos conocemos de este año me caiste super bien.");
+    data[0][0][0].append("aunque nos conocemos de este año me caiste super bien.");
+
+    data[0][0][0].append("Eres una vacana.");
+    data[0][0][0].append("Eres una vacana.");
+    data[0][0][0].append("Eres una vacana.");
+    data[0][0][0].append("Eres una vacana.");
+
+    //______________________________________________FIN FRASES_________________________
+
+    removeExitEvent(getSurface());
+    leap2 = new LeapMotion(this);
+    parrafo="";
+
+    fuente= createFont("Exo2-Medium.otf", 38);
+  }
+
+  float dis2;
+  int intimidad;
+  int intensidad;
+  int intencionalidad;
+  int intimidadvieja;
+  int intensidadvieja;
+  int intencionalidadvieja;
+ 
+  String linea = "";
+  String frase = "";
+  String anterior;
+  int cualDeLaLista;
+  void draw() {
+    background(255);
+
+      for (Hand hand2 : leap2.getHands ()) {
+        // ==================================================
+        // 2. Hand
+        PVector handPosition2       = hand2.getPosition();
+        boolean handIsLeft2  = hand2.isLeft();
+        boolean handIsRight2 = hand2.isRight();
+        float[] movimientoB = handPosition2.array();
+        // ==================================================
+       
+        dis2 = movRight2 - movLeft2;
+        dis2 = abs(dis2);
+        dis2 = (dis2 > 600) ? 600 : dis2;        
+
+        handGrab2  = hand2.getGrabStrength();
+
+        if (handIsLeft2) {
+          movLeft2 = movimientoB[0];
+        } else if (handIsRight2) {
+          movRight2 = movimientoB[0];
+        }
+
+        intimidad = int(dis2/(600/3));
+
+
+        if (intimidad<0) intimidad=0;
+        if (intimidad>2) intimidad=2;
+        intimidad = 2 - intimidad;
+
+        z = (movimientoB[2] < 10 ? 10 : movimientoB[2] > 60 ? 60 : movimientoB[2]) - 20;
+        intensidad = int(z/(50/9));
+        if (intensidad<0) intensidad=0;  
+        if (intensidad>8) intensidad=8;
+        intencionalidad = int(handGrab2*3);
+        if (intencionalidad<0) intencionalidad=0;
+        if (intencionalidad>2) intencionalidad=2;
+ 
+        cualDeLaLista = 0;
+        if(cualDeLaLista < data[intimidad][intensidad][intencionalidad].size() && data[intimidad][intensidad][intencionalidad].get(cualDeLaLista) != null && data[intimidad][intensidad][intencionalidad].get(cualDeLaLista) != "")
+        {
+            frase = data[intimidad][intensidad][intencionalidad].get(cualDeLaLista);
+            parrafo=parrafo+" "+ frase;
+        }
+       
+        int longitud = 200;
+        if(parrafo.length() > longitud + 1)
+        {
+          linea = parrafo.substring(parrafo.length()-longitud, parrafo.length()-1);
+        }
+       
+    }  
+   
+    //println("**********************");
+    //println(intimidad);
+    //println(intensidad);
+    //println(intencionalidad);
+    //println(frase);
+    fill(20);
+    textFont(fuente);
+    textSize(56);
+    text(linea, 130, 50, 700, 300);  
+
+    fill(20);
+    textSize(32);
+    text("Intimidad: " + intimidad, 120, 430);
+    text("Intensidad: " + intensidad, 330, 430);
+    text("Intencionalidad: " + intencionalidad, 550, 430);
+    }
+  @ Override void exit() {
+  }
+}
